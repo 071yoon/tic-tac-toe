@@ -1,18 +1,46 @@
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 
 export default function Board() {
-  const board = [
+  const [myTurn, setMyTurn] = useState(true);
+  const [board, setBoard] = useState([
     ["", "", ""],
     ["", "", ""],
     ["", "", ""],
-  ];
+  ]);
+
+  const onClickBoard = ({
+    event,
+    position,
+  }: {
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>;
+    position: { i: number; j: number };
+  }) => {
+    event.preventDefault();
+    if (board[position.i][position.j] !== "") return;
+    if (myTurn) {
+      const newBoard = [...board];
+      newBoard[position.i][position.j] = "X";
+      setBoard(newBoard);
+      setMyTurn(false);
+    } else {
+      const newBoard = [...board];
+      newBoard[position.i][position.j] = "O";
+      setBoard(newBoard);
+      setMyTurn(true);
+    }
+  };
 
   return (
     <div>
       {board.map((row, i) => (
         <SingleRow key={i}>
           {row.map((cell, j) => (
-            <SingleBox key={j} position={{ i, j }}>
+            <SingleBox
+              key={j}
+              position={{ i, j }}
+              onClick={(e) => onClickBoard({ event: e, position: { i, j } })}
+            >
               {cell}
             </SingleBox>
           ))}
