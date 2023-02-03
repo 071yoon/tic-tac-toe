@@ -1,13 +1,24 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "@emotion/styled";
+import { minimax } from "./minimax";
+
+export type Board = Array<Array<string>>;
 
 export default function Board() {
   const [myTurn, setMyTurn] = useState(true);
-  const [board, setBoard] = useState([
+  const [board, setBoard] = useState<Board>([
     ["", "", ""],
     ["", "", ""],
     ["", "", ""],
   ]);
+
+  const setMyBoard = useCallback(
+    (newBoard: Board) => {
+      setBoard(newBoard);
+      setMyTurn(!myTurn);
+    },
+    [myTurn]
+  );
 
   const onClickBoard = ({
     event,
@@ -18,17 +29,20 @@ export default function Board() {
   }) => {
     event.preventDefault();
     if (board[position.i][position.j] !== "") return;
-    if (myTurn) {
-      const newBoard = [...board];
-      newBoard[position.i][position.j] = "X";
-      setBoard(newBoard);
-      setMyTurn(false);
-    } else {
-      const newBoard = [...board];
-      newBoard[position.i][position.j] = "O";
-      setBoard(newBoard);
-      setMyTurn(true);
-    }
+    const newBoard = [...board];
+    newBoard[position.i][position.j] = "X";
+    minimax(newBoard, setMyBoard, myTurn);
+    // if (myTurn) {
+    //   const newBoard = [...board];
+    //   newBoard[position.i][position.j] = "X";
+    //   setBoard(newBoard);
+    //   setMyTurn(false);
+    // } else {
+    //   const newBoard = [...board];
+    //   newBoard[position.i][position.j] = "O";
+    //   setBoard(newBoard);
+    //   setMyTurn(true);
+    // }
   };
 
   return (
