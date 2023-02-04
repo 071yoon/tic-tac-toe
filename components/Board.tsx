@@ -5,20 +5,15 @@ import { minimax } from "./minimax";
 export type Board = Array<Array<string>>;
 
 export default function Board() {
-  const [myTurn, setMyTurn] = useState(true);
   const [board, setBoard] = useState<Board>([
     ["", "", ""],
     ["", "", ""],
     ["", "", ""],
   ]);
 
-  const setMyBoard = useCallback(
-    (newBoard: Board) => {
-      setBoard(newBoard);
-      setMyTurn(!myTurn);
-    },
-    [myTurn]
-  );
+  const setMyBoard = (newBoard: Board) => {
+    setBoard(newBoard);
+  };
 
   const onClickBoard = ({
     event,
@@ -31,18 +26,12 @@ export default function Board() {
     if (board[position.i][position.j] !== "") return;
     const newBoard = [...board];
     newBoard[position.i][position.j] = "X";
-    minimax(newBoard, setMyBoard, myTurn);
-    // if (myTurn) {
-    //   const newBoard = [...board];
-    //   newBoard[position.i][position.j] = "X";
-    //   setBoard(newBoard);
-    //   setMyTurn(false);
-    // } else {
-    //   const newBoard = [...board];
-    //   newBoard[position.i][position.j] = "O";
-    //   setBoard(newBoard);
-    //   setMyTurn(true);
-    // }
+    setBoard(newBoard);
+    setTimeout(() => {
+      const minimaxBoard = minimax(newBoard, setMyBoard);
+      console.log("i am minimax board", minimaxBoard);
+      // setBoard(minimax(newBoard, setBoard));
+    }, 100);
   };
 
   return (
