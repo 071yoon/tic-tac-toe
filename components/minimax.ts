@@ -1,6 +1,6 @@
 import { Board } from "./Board";
 
-export const minimax = (newBoard: Board, setMyBoard: any) => {
+export const minimax = (newBoard: Board) => {
   let bestScore = -Infinity;
   let move = { i: 0, j: 0 };
   for (let i = 0; i < 3; i++) {
@@ -17,23 +17,10 @@ export const minimax = (newBoard: Board, setMyBoard: any) => {
     }
   }
   newBoard[move.i][move.j] = "O";
-  console.log("===new board===", newBoard);
   return newBoard;
-  // setMyBoard(newBoard);
-  if (gameOver(newBoard)) {
-    console.log("Game Over");
-  }
 };
 
-const gameOver = (board: Board) => {
-  let result = checkWinner(board);
-  if (result !== "T" && result !== null) {
-    return true;
-  }
-  return false;
-};
-
-const checkWinner = (board: Board) => {
+export const checkWinner = (board: Board) => {
   let winner = null;
 
   // horizontal

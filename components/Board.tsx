@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import styled from "@emotion/styled";
-import { minimax } from "./minimax";
+import { minimax, checkWinner } from "./minimax";
 
 export type Board = Array<Array<string>>;
 
@@ -10,10 +10,6 @@ export default function Board() {
     ["", "", ""],
     ["", "", ""],
   ]);
-
-  const setMyBoard = (newBoard: Board) => {
-    setBoard(newBoard);
-  };
 
   const onClickBoard = ({
     event,
@@ -27,12 +23,56 @@ export default function Board() {
     const newBoard = [...board];
     newBoard[position.i][position.j] = "X";
     setBoard(newBoard);
+    if (checkWinner(newBoard) === "X") {
+      setTimeout(() => {
+        alert("X win");
+        setBoard([
+          ["", "", ""],
+          ["", "", ""],
+          ["", "", ""],
+        ]);
+      }, 500);
+      return;
+    } else if (checkWinner(newBoard) === "Tie") {
+      setTimeout(() => {
+        alert("Tie");
+        setBoard([
+          ["", "", ""],
+          ["", "", ""],
+          ["", "", ""],
+        ]);
+      }, 500);
+      return;
+    }
     setTimeout(() => {
-      const minimaxBoard = minimax(newBoard, setMyBoard);
-      console.log("i am minimax board", minimaxBoard);
-      // setBoard(minimax(newBoard, setBoard));
+      runMiniMax();
     }, 100);
   };
+
+  const runMiniMax = useCallback(() => {
+    const minimaxBoard = minimax(board);
+    setBoard(minimaxBoard);
+    if (checkWinner(minimaxBoard) === "O") {
+      setTimeout(() => {
+        alert("O win");
+        setBoard([
+          ["", "", ""],
+          ["", "", ""],
+          ["", "", ""],
+        ]);
+      }, 500);
+    } else if (checkWinner(minimaxBoard) === "Tie") {
+      setTimeout(() => {
+        alert("Tie");
+        setBoard([
+          ["", "", ""],
+          ["", "", ""],
+          ["", "", ""],
+        ]);
+      }, 500);
+      return;
+    }
+  }, [board]);
 
   return (
     <div>
