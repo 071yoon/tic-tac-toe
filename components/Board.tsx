@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from "react";
 import styled from "@emotion/styled";
 import { minimax, checkWinner } from "./minimax";
+import X from "public/assets/x.svg";
+import O from "public/assets/o.svg";
 
 export type Board = Array<Array<string>>;
 
@@ -84,7 +86,7 @@ export default function Board() {
               position={{ i, j }}
               onClick={(e) => onClickBoard({ event: e, position: { i, j } })}
             >
-              {cell}
+              {cell ? cell === "X" ? <X /> : <O /> : null}
             </SingleBox>
           ))}
         </SingleRow>
@@ -107,4 +109,7 @@ const SingleBox = styled.div<{ position: { i: number; j: number } }>`
   justify-content: center;
   align-items: center;
   font-size: 50px;
+  svg {
+    object-fit: fill;
+  }
 `;
